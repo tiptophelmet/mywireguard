@@ -89,7 +89,8 @@ mywg del-vpn --vpnid=team-vpn
 ```
 
 # __Roadmap__
-- ### Firewall for DigitalOcean-hosted VPN
-- ### Better error handling
-- ### Tests
-- ### AWS Support
+- Firewall for DigitalOcean-hosted VPN
+- Better error handling
+- Tests
+- Docs
+- AWS Support
