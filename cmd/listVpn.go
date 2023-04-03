@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"log"
-
 	"github.com/spf13/cobra"
 	action "github.com/tiptophelmet/mywireguard/pkg/action"
 )
@@ -12,10 +10,8 @@ var listVPNCmd = &cobra.Command{
 	Short: "List all VPNs",
 	Long:  `This command lists all VPNs that have been created.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		action := action.InitListVpnAction()
-		if err := action.List(); err != nil {
-			log.Fatalf(err.Error())
-		}
+		listVpnAction := action.InitListVpnAction()
+		listVpnAction.List()
 	},
 }
 

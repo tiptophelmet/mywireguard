@@ -2,6 +2,7 @@ package action
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/tiptophelmet/mywireguard/paths"
@@ -14,16 +15,15 @@ func InitListVpnAction() *ListVpnAction {
 	return &ListVpnAction{}
 }
 
-func (act *ListVpnAction) List() error {
+func (act *ListVpnAction) List() {
 	// Open the directory
 	dirEntries, err := os.ReadDir(paths.BuildVpnsDirPath(paths.MkDirAllPath))
 	if err != nil {
-		return err
+		log.Fatalf(err.Error())
 	}
 
 	if len(dirEntries) == 0 {
-		fmt.Println("No deployed VPNs found.")
-		return nil
+		log.Fatalf("no deployed VPNs found")
 	}
 
 	fmt.Printf("(%d) deployed VPNs found:\n", len(dirEntries))
@@ -34,6 +34,4 @@ func (act *ListVpnAction) List() error {
 			fmt.Println(entry.Name())
 		}
 	}
-
-	return nil
 }

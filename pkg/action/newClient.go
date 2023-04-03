@@ -19,7 +19,7 @@ type NewClientAction struct {
 	confFilePath string
 }
 
-func InitNewClientAction(vpn *entry.VpnEntry, confFilePath string) (*NewClientAction, error) {
+func InitNewClientAction(vpn *entry.VpnEntry, confFilePath string) *NewClientAction {
 	fmt.Println("[INFO] Initializing new client action ...")
 
 	client := entry.NewClientEntry()
@@ -33,10 +33,10 @@ func InitNewClientAction(vpn *entry.VpnEntry, confFilePath string) (*NewClientAc
 	// Check if client exists
 	_, err := os.Stat(paths.BuildVpnClientFilePath(vpn.ID, client.ID, paths.MkDirAllPath))
 	if err == nil {
-		return nil, fmt.Errorf("this VPN client already exists: %s", client.ID)
+		log.Fatalf("this VPN client already exists: %s", client.ID)
 	}
 
-	return &NewClientAction{vpn, client, confFilePath}, nil
+	return &NewClientAction{vpn, client, confFilePath}
 }
 
 func (act *NewClientAction) Prepare() {
@@ -52,7 +52,11 @@ func (act *NewClientAction) Prepare() {
 	fmt.Println("[OK] Wireguard client keys successfully generated!")
 
 	// Create wireguard peer & assign allowed IP
-	peerAllowedIP := act.vpn.CreateWireguardPeer(act.client.WgClientPublicKey)
+	peerAllowedIP, err := act.vpn.CreateWireguardPeer(act.client.WgClientPublicKey)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
 	act.client.WgClientAllowedIP = peerAllowedIP
 
 	fmt.Println("[OK] Wireguard peer allowed IP:", peerAllowedIP)
@@ -74,16 +78,22 @@ func (act *NewClientAction) Save() error {
 func (act *NewClientAction) GenerateWireguardClientConf() {
 	fmt.Println("[INFO] Preparing to generate Wireguard client .conf ...")
 
-	confFileBytes, err := os.ReadFile("pkg/static/wireguard/raw/client.conf")
+	confFileBytes, err := os.ReadFile("static/wireguard/raw/client.conf")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
 
-	values := utils.MergeStrMaps(
-		utils.ExtractTagMap("wgclient", act.vpn),
-		utils.ExtractTagMap("wgclient", act.client),
-	)
+	vpnEntryTags, err := utils.ExtractTagMap("wgclient", act.vpn)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 
+	clientEntryTags, err := utils.ExtractTagMap("wgclient", act.client)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	values := utils.MergeStrMaps(vpnEntryTags, clientEntryTags)
 	if len(values) == 0 {
 		log.Fatalf("client conf values are absent")
 	}

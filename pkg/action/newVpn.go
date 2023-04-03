@@ -16,10 +16,10 @@ type NewVpnAction struct {
 	entry *entry.VpnEntry
 }
 
-func InitNewVpnAction(ID string, cloud cloud.Cloud) (*NewVpnAction, error) {
+func InitNewVpnAction(ID string, cloud cloud.Cloud) *NewVpnAction {
 	_, err := os.Stat(paths.BuildVpnFilePath(ID, paths.GetPath))
 	if err == nil {
-		return nil, fmt.Errorf("this VPN already exists: %s", ID)
+		log.Fatalf("this VPN already exists: %s", ID)
 	}
 
 	entry := entry.NewVpnEntry()
@@ -29,7 +29,7 @@ func InitNewVpnAction(ID string, cloud cloud.Cloud) (*NewVpnAction, error) {
 
 	fmt.Println("[INFO] Initializing new VPN action ...")
 
-	return &NewVpnAction{entry}, nil
+	return &NewVpnAction{entry}
 }
 
 func (act *NewVpnAction) Prepare() {
@@ -70,7 +70,10 @@ func (act *NewVpnAction) ApplyInfra() {
 	fmt.Println("[INFO] Preparing terraform ...")
 
 	// Create VPN terraform
-	composer, executor := infra.From(act.entry.Cloud)
+	composer, executor, err := infra.From(act.entry.Cloud)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 
 	if err := composer.LoadTemplates(); err != nil {
 		log.Fatalf(err.Error())
@@ -79,7 +82,6 @@ func (act *NewVpnAction) ApplyInfra() {
 	composer.Compose(act.entry)
 	composer.Save()
 
-	var err error
 	act.entry.WgServerPublicIP, err = executor.Apply(paths.GetTerraformDirPath(act.entry.ID, paths.GetPath))
 	if err != nil {
 		log.Fatalf(err.Error())

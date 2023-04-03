@@ -14,7 +14,7 @@ type DeleteVpnAction struct {
 	entry *entry.VpnEntry
 }
 
-func InitDeleteVpnAction(entry *entry.VpnEntry) (*DeleteVpnAction, error) {
+func InitDeleteVpnAction(entry *entry.VpnEntry) *DeleteVpnAction {
 	fmt.Println("[INFO] Initializing delete VPN action ...")
 
 	// Check if clients are present
@@ -24,20 +24,23 @@ func InitDeleteVpnAction(entry *entry.VpnEntry) (*DeleteVpnAction, error) {
 	}
 
 	if len(entries) != 0 {
-		return nil, fmt.Errorf("cannot delete %s VPN with existing clients", entry.ID)
+		log.Fatalf("failed to delete %s VPN with existing clients", entry.ID)
 	}
 
 	fmt.Println("[INFO] No clients found, proceeding ...")
 
-	return &DeleteVpnAction{entry}, nil
+	return &DeleteVpnAction{entry}
 }
 
 func (act *DeleteVpnAction) DestroyInfra() {
 	fmt.Println("[INFO] Preparing to destroy terraform ...")
 
-	_, executor := infra.From(act.entry.Cloud)
+	_, executor, err := infra.From(act.entry.Cloud)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 
-	err := executor.Destroy(paths.GetTerraformDirPath(act.entry.ID, paths.GetPath))
+	err = executor.Destroy(paths.GetTerraformDirPath(act.entry.ID, paths.GetPath))
 	if err != nil {
 		log.Fatalf(err.Error())
 	}

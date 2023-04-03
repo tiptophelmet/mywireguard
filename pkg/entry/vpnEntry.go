@@ -3,8 +3,8 @@ package entry
 import (
 	"bytes"
 	"encoding/gob"
+	"errors"
 	"fmt"
-	"log"
 	"os/exec"
 	"strings"
 
@@ -35,7 +35,7 @@ func NewVpnEntry() *VpnEntry {
 	return entry
 }
 
-func (vpn *VpnEntry) executeCommand(cmdStr string) string {
+func (vpn *VpnEntry) executeCommand(cmdStr string) (string, error) {
 	sshDestination := fmt.Sprintf("root@%s", vpn.WgServerPublicIP)
 
 	cmd := exec.Command("ssh", "-t", "-i", vpn.SshPrivateKeyPath, "-o", "StrictHostKeyChecking=no", sshDestination, cmdStr)
@@ -48,33 +48,37 @@ func (vpn *VpnEntry) executeCommand(cmdStr string) string {
 
 	err := cmd.Run()
 	if err != nil {
-		log.Fatalf(stdErr.String())
+		return "", errors.New(stdErr.String())
 	}
 
-	return out.String()
+	output := strings.ReplaceAll(out.String(), "\r\n", "\n")
+
+	return output, nil
 }
 
 func (vpn *VpnEntry) getAllocatedPeerIPs() ([]string, error) {
 	// Run the "wg" command to get the list of peers and their allowed IPs
-	output := vpn.executeCommand("wg show wg0 | grep 'allowed ips' | awk -F': ' '{print $2}'")
+	output, err := vpn.executeCommand("wg show wg0 | grep 'allowed ips' | awk -F': ' '{print $2}'")
+	if err != nil {
+		return []string{}, err
+	}
 
 	if strings.TrimSpace(output) == "" {
 		return []string{}, nil
 	}
 
-	output = strings.ReplaceAll(output, "\r\n", "\n")
-
 	// Parse the allowed ips and return them as a slice of strings
 	return strings.Split(strings.TrimSpace(output), "\n"), nil
 }
 
-func (vpn *VpnEntry) CreateWireguardPeer(clientPublicKey string) (allowedIP string) {
+func (vpn *VpnEntry) CreateWireguardPeer(clientPublicKey string) (string, error) {
 	// Get the list of already allocated IPs
 	allocatedIPs, err := vpn.getAllocatedPeerIPs()
 	if err != nil {
-		log.Fatalf(err.Error())
-		return
+		return "", err
 	}
+
+	var allowedIP string
 
 	if len(allocatedIPs) == 0 {
 		fmt.Println("[INFO] No Wireguard peer allocated IPs so far")
@@ -85,8 +89,7 @@ func (vpn *VpnEntry) CreateWireguardPeer(clientPublicKey string) (allowedIP stri
 		// Find the next available IP
 		allowedIP, err = utils.AssumeWireguardPeerIP(vpn.WgServerInterfaceAddress, allocatedIPs)
 		if err != nil {
-			log.Fatalf(err.Error())
-			return
+			return "", err
 		}
 	}
 
@@ -96,18 +99,24 @@ func (vpn *VpnEntry) CreateWireguardPeer(clientPublicKey string) (allowedIP stri
 	setWgPeerCmd := fmt.Sprintf("wg set wg0 peer %s allowed-ips %s persistent-keepalive 25", strings.TrimSpace(clientPublicKey), allowedIP)
 
 	// Run the command to add the new peer
-	vpn.executeCommand(setWgPeerCmd)
+	_, err = vpn.executeCommand(setWgPeerCmd)
+	if err != nil {
+		return "", err
+	}
 
 	fmt.Println("[OK] Wireguard peer successfully created!")
 
-	return
+	return allowedIP, nil
 }
 
 func (vpn *VpnEntry) DeleteWireguardPeer(clientPublicKey string) error {
 	RemoveWgPeerCmd := fmt.Sprintf("wg set wg0 peer %s remove", clientPublicKey)
 
 	// Run the command to remove the peer
-	vpn.executeCommand(RemoveWgPeerCmd)
+	_, err := vpn.executeCommand(RemoveWgPeerCmd)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/spf13/cobra"
 	"github.com/tiptophelmet/mywireguard/pkg/action"
@@ -18,24 +17,12 @@ var newClientCmd = &cobra.Command{
 		fmt.Printf("[INFO] Proceeding to create a new client for VPN: %s\n", vpnid)
 
 		getVpnAction := action.InitGetVpnAction()
-		vpn, err := getVpnAction.Get(vpnid)
-		if err != nil {
-			log.Fatalf(err.Error())
-		}
+		vpn := getVpnAction.Get(vpnid)
 
-		action, err := action.InitNewClientAction(vpn, conf)
-		if err != nil {
-			fmt.Printf("[ERROR] %s\n", err.Error())
-			return
-		}
-
-		action.Prepare()
-
-		if err = action.Save(); err != nil {
-			log.Fatalf(err.Error())
-		}
-
-		action.GenerateWireguardClientConf()
+		newClientAction := action.InitNewClientAction(vpn, conf)
+		newClientAction.Prepare()
+		newClientAction.Save()
+		newClientAction.GenerateWireguardClientConf()
 	},
 }
 

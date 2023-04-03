@@ -1,8 +1,8 @@
 package infra
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -24,31 +24,46 @@ func InitInfraComposer() *InfraComposer {
 	}
 }
 
-func (ic *InfraComposer) addTemplate(rawPath string) {
+func (ic *InfraComposer) addTemplate(rawPath string) error {
 	fileBytes, err := os.ReadFile(rawPath)
 	if err != nil {
-		log.Fatalf(err.Error())
+		return err
 	}
 
 	baseName := filepath.Base(rawPath)
 	ic.templates[baseName] = string(fileBytes)
+
+	return nil
 }
 
 func (ic *InfraComposer) LoadTemplates() error {
-	ic.addTemplate("pkg/infra/digitalocean/terraform/raw/main.tf")
-	ic.addTemplate("pkg/infra/digitalocean/terraform/raw/wireguard_setup.sh")
+	err := ic.addTemplate("pkg/infra/digitalocean/terraform/raw/main.tf")
+	if err != nil {
+		return err
+	}
+
+	err = ic.addTemplate("pkg/infra/digitalocean/terraform/raw/wireguard_setup.sh")
+	if err != nil {
+		return err
+	}
 
 	fmt.Println("[OK] Terraform templates loaded!")
 
 	return nil
 }
 
-func (ic *InfraComposer) Compose(vpnEntry *entry.VpnEntry) {
+func (ic *InfraComposer) Compose(vpnEntry *entry.VpnEntry) error {
 	ic.infraPath = paths.GetTerraformDirPath(vpnEntry.ID, paths.MkDirAllPath)
-	ic.values = utils.ExtractTagMap("terraform", vpnEntry)
+
+	var err error
+	ic.values, err = utils.ExtractTagMap("terraform", vpnEntry)
+
+	if err != nil {
+		return err
+	}
 
 	if len(ic.values) == 0 {
-		log.Fatalf("infra values are absent")
+		return errors.New("infra values are absent")
 	}
 
 	for baseName, template := range ic.templates {
@@ -56,23 +71,24 @@ func (ic *InfraComposer) Compose(vpnEntry *entry.VpnEntry) {
 	}
 
 	fmt.Println("[OK] Terraform composed!")
+	return nil
 }
 
-func (ic *InfraComposer) Save() {
+func (ic *InfraComposer) Save() error {
 	for baseName, composed := range ic.templates {
 		path := filepath.Join(ic.infraPath, baseName)
 
-		// Create the directory path if it does not already exist
 		dirPath := filepath.Dir(path)
 		if err := os.MkdirAll(dirPath, 0755); err != nil {
-			log.Fatalf("error creating directory: %s\n", err)
+			return fmt.Errorf("failed to create dir: %s", err)
 		}
 
 		err := os.WriteFile(path, []byte(composed), 0644)
 		if err != nil {
-			log.Fatalf(err.Error())
+			return err
 		}
 	}
 
 	fmt.Println("[OK] Terraform saved!")
+	return nil
 }

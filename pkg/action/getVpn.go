@@ -23,12 +23,12 @@ func InitGetVpnAction() *GetVpnAction {
 	return &GetVpnAction{}
 }
 
-func (act *GetVpnAction) Get(vpnID string) (*entry.VpnEntry, error) {
+func (act *GetVpnAction) Get(vpnID string) *entry.VpnEntry {
 	vpnFilePath := paths.BuildVpnFilePath(vpnID, paths.GetPath)
 
 	_, err := os.Stat(vpnFilePath)
 	if os.IsNotExist(err) {
-		return nil, fmt.Errorf("this VPN does not exist: %s", vpnID)
+		log.Fatalf("this VPN does not exist: %s", vpnID)
 	}
 
 	fmt.Println("[INFO] Getting VPN entry from", vpnFilePath)
@@ -39,5 +39,5 @@ func (act *GetVpnAction) Get(vpnID string) (*entry.VpnEntry, error) {
 		log.Fatalf(err.Error())
 	}
 
-	return vpnEntry, nil
+	return vpnEntry
 }

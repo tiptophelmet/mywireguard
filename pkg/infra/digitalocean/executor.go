@@ -14,14 +14,14 @@ func InitInfraExecutor() *InfraExecutor {
 	return &InfraExecutor{}
 }
 
-func (infra *InfraExecutor) Apply(execPath string) (publicIP string, err error) {
+func (infra *InfraExecutor) Apply(execPath string) (vpnPublicIP string, err error) {
 	fmt.Println("[INFO] Terraform init in progress ...")
 
 	cmd := exec.Command("terraform", "init")
 	cmd.Dir = execPath
 	err = cmd.Run()
 	if err != nil {
-		return "", fmt.Errorf("error running 'terraform init': %w for %s", err, execPath)
+		return "", fmt.Errorf("error running 'terraform init': %w (%s)", err, execPath)
 	}
 
 	fmt.Println("[OK] Terraform init done!")
@@ -39,11 +39,10 @@ func (infra *InfraExecutor) Apply(execPath string) (publicIP string, err error) 
 
 	err = cmd.Run()
 	if err != nil {
-		fmt.Println(stdErr.String())
-		return "", fmt.Errorf("error running 'terraform apply': %w for %s", err, execPath)
+		return "", fmt.Errorf("error running 'terraform apply' %w (%s) error: %s", err, execPath, stdErr.String())
 	}
 
-	fmt.Println("[OK] Terraform init done!")
+	fmt.Println("[OK] Terraform apply done!")
 
 	// Extract the public IP from the Terraform output
 	re := regexp.MustCompile(`public_ip\s+=\s+\"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\"`)
@@ -52,9 +51,9 @@ func (infra *InfraExecutor) Apply(execPath string) (publicIP string, err error) 
 		return "", fmt.Errorf("failed to extract public IP from Terraform output")
 	}
 
-	publicIP = matches[1]
+	vpnPublicIP = matches[1]
 
-	fmt.Println("[OK] VPN public IP:", publicIP)
+	fmt.Println("[OK] VPN public IP:", vpnPublicIP)
 
 	return
 }

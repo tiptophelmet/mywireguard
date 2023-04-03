@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"path"
 	"path/filepath"
 	"strings"
@@ -22,21 +21,14 @@ var newVPNCmd = &cobra.Command{
 		cc := cloud.NewCloudConfig()
 		cc.ImportToml(tomlPath)
 
-		resolvedCloud, err := cc.InitCloud()
-		if err != nil {
-			log.Fatalf(err.Error())
-		}
+		resolvedCloud := cc.InitCloud()
 
 		vpnID := strings.TrimSuffix(filepath.Base(tomlPath), path.Ext(tomlPath))
-		action, err := action.InitNewVpnAction(vpnID, resolvedCloud)
-		if err != nil {
-			fmt.Printf("[ERROR] %s\n", err.Error())
-			return
-		}
+		newVpnAction := action.InitNewVpnAction(vpnID, resolvedCloud)
 
-		action.Prepare()
-		action.ApplyInfra()
-		action.Save()
+		newVpnAction.Prepare()
+		newVpnAction.ApplyInfra()
+		newVpnAction.Save()
 
 		fmt.Println("[OK] VPN successfully deployed!")
 	},

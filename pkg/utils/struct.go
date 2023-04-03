@@ -1,13 +1,13 @@
 package utils
 
 import (
-	"log"
+	"errors"
 	"reflect"
 
 	"golang.org/x/exp/maps"
 )
 
-func ExtractTagMap(tag string, st interface{}) map[string]string {
+func ExtractTagMap(tag string, st interface{}) (map[string]string, error) {
 	tagMap := map[string]string{}
 
 	t := reflect.TypeOf(st)
@@ -15,7 +15,7 @@ func ExtractTagMap(tag string, st interface{}) map[string]string {
 
 	if t.Kind() == reflect.Pointer {
 		if v.IsNil() {
-			log.Fatalf("nil struct passed to ExtractTagMap")
+			return tagMap, errors.New("nil pointer struct passed to ExtractTagMap")
 		}
 		v = v.Elem()
 		t = t.Elem()
@@ -28,7 +28,11 @@ func ExtractTagMap(tag string, st interface{}) map[string]string {
 			field.Type.Kind() == reflect.Pointer ||
 			field.Type.Kind() == reflect.Interface {
 
-			extractedMap := ExtractTagMap(tag, v.Field(i).Interface())
+			extractedMap, err := ExtractTagMap(tag, v.Field(i).Interface())
+			if err != nil {
+				return extractedMap, err
+			}
+			
 			maps.Copy(tagMap, extractedMap)
 		}
 
@@ -36,5 +40,5 @@ func ExtractTagMap(tag string, st interface{}) map[string]string {
 			tagMap[tagVal] = v.Field(i).String()
 		}
 	}
-	return tagMap
+	return tagMap, nil
 }

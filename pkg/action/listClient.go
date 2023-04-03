@@ -21,7 +21,7 @@ func (act *ListClientAction) List(vpnID string) {
 	vpnClientsDirPath := paths.BuildVpnClientsDirPath(vpnID, paths.GetPath)
 	_, err := os.Stat(vpnClientsDirPath)
 	if os.IsNotExist(err) {
-		fmt.Printf("this VPN does not exist: %s\n", vpnID)
+		log.Fatalf("this VPN does not exist: %s", vpnID)
 		return
 	}
 
@@ -32,7 +32,7 @@ func (act *ListClientAction) List(vpnID string) {
 	}
 
 	if len(entries) == 0 {
-		fmt.Printf("No clients found for VPN %s\n", vpnID)
+		log.Fatalf("no clients found for VPN %s", vpnID)
 		return
 	}
 

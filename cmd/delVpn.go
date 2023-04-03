@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	action "github.com/tiptophelmet/mywireguard/pkg/action"
 )
@@ -14,21 +12,12 @@ var delVPNCmd = &cobra.Command{
 	Short: "Delete a VPN with the given VPN ID",
 	Long:  `This command deletes a VPN with the specified VPN ID.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		getAction := action.InitGetVpnAction()
-		vpnEntry, err := getAction.Get(vpnID)
-		if err != nil {
-			fmt.Printf("[ERROR] %s", err.Error())
-			return
-		}
+		getVpnAction := action.InitGetVpnAction()
+		vpn := getVpnAction.Get(vpnID)
 
-		delAction, err := action.InitDeleteVpnAction(vpnEntry)
-		if err != nil {
-			fmt.Printf("[ERROR] %s\n", err.Error())
-			return
-		}
-		
-		delAction.DestroyInfra()
-		delAction.Delete()
+		delVpnAction := action.InitDeleteVpnAction(vpn)
+		delVpnAction.DestroyInfra()
+		delVpnAction.Delete()
 	},
 }
 

@@ -1,7 +1,7 @@
 package infra
 
 import (
-	"log"
+	"fmt"
 	"reflect"
 
 	"github.com/tiptophelmet/mywireguard/pkg/cloud"
@@ -10,22 +10,21 @@ import (
 )
 
 type InfraExecutor interface {
-	Apply(execPath string) (publicIP string, err error)
+	Apply(execPath string) (vpnPublicIP string, err error)
 	Destroy(execPath string) error
 }
 
 type InfraComposer interface {
 	LoadTemplates() error
-	Compose(*entry.VpnEntry)
-	Save()
+	Compose(*entry.VpnEntry) error
+	Save() error
 }
 
-func From(cl cloud.Cloud) (InfraComposer, InfraExecutor) {
+func From(cl cloud.Cloud) (InfraComposer, InfraExecutor, error) {
 	switch cl.(type) {
 	case *cloud.DigitalOceanCloud:
-		return digitalocean.InitInfraComposer(), digitalocean.InitInfraExecutor()
+		return digitalocean.InitInfraComposer(), digitalocean.InitInfraExecutor(), nil
 	}
 
-	log.Fatalf("no supported infra found for cloud %s", reflect.TypeOf(cl).Name())
-	return nil, nil
+	return nil, nil, fmt.Errorf("no supported infra found for cloud %s", reflect.TypeOf(cl).Name())
 }
