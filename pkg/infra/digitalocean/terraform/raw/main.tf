@@ -45,6 +45,38 @@ resource "digitalocean_droplet" "mywireguard_vpn" {
   }
 }
 
+resource "digitalocean_firewall" "mywireguard_vpn_firewall" {
+  name = "{vpn_identifier}-firewall"
+  droplet_ids = [
+    digitalocean_droplet.mywireguard_vpn.id
+  ]
+
+  inbound_rule {
+    protocol         = "tcp"
+    port_range       = "22"
+    source_addresses = ["0.0.0.0/0", "::/0"]
+  }
+
+  inbound_rule {
+    protocol         = "udp"
+    port_range       = "{wireguard_interface_listen_port}"
+    source_addresses = ["0.0.0.0/0", "::/0"]
+  }
+
+  # Feature is planned: allow specific outbound TCP ports instead of all TCP ports
+  outbound_rule {
+    protocol              = "tcp"
+    port_range            = "1-65535"
+    destination_addresses = ["0.0.0.0/0", "::/0"]
+  }
+
+  outbound_rule {
+    protocol              = "udp"
+    port_range            = "1-65535"
+    destination_addresses = ["0.0.0.0/0", "::/0"]
+  }
+}
+
 output "public_ip" {
   value = digitalocean_droplet.mywireguard_vpn.ipv4_address
 }
