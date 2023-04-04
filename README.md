@@ -15,7 +15,7 @@ With our app, you can easily set up a secure VPN connection between your devices
 
 # 📌 __Legend__
 
-Most workers dealing with sensitive firewall-protected web resources need a static IP.
+Most workers dealing with sensitive firewall-protected web resources (like AWS/GCP VPCs) need a static IP.
 
 It's great, if you, as a worker, is provided with a company's VPN & a Static IP. Otherwise, surprisingly, you need to deal with it yourself.
 
@@ -152,13 +152,14 @@ Download: https://www.wireguard.com/install/
 # 🗺️ __Roadmap__
 - 👌 IMPROVE: CLI commands design
 - 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
+- 📦 NEW: Makefile
 - 👌 IMPROVE: Better error handling
 - 👌 IMPROVE: Better logging (logger, colored output, timer output for operations with long-term execution)
 - 🤖 TEST: Tests
 - 📖 DOC: Code docs
 - 📦 NEW: AWS Support
 - 📦 NEW: Bulk generation of VPN client .conf(s)
-- 📦 NEW: Makefile
+- 📦 NEW: Dedicated public IPs for VPN clients
 
 &nbsp;
 
