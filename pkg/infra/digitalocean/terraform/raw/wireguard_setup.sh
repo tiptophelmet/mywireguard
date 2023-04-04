@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Wait for any background package management processes to complete
-sleep 60
-
 # Install WireGuard
 add-apt-repository ppa:wireguard/wireguard -y
 apt-get update
