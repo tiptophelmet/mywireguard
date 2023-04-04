@@ -60,7 +60,6 @@ api_token = "dop_v1_...*redacted*..."
 
 [droplet]
 image = "ubuntu-20-04-x64"
-name = "team-vpn"
 region = "fra1"
 size = "s-1vcpu-1gb"
 ```
@@ -151,13 +150,15 @@ Download: https://www.wireguard.com/install/
 &nbsp;
 
 # 🗺️ __Roadmap__
-- Firewall for DigitalOcean-hosted VPN
-- Better error handling
-- Better logging
-- Tests
-- Docs
-- AWS Support
-- Bulk generation of VPN clients
+- 👌 IMPROVE: CLI commands design
+- 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
+- 👌 IMPROVE: Better error handling
+- 👌 IMPROVE: Better logging (logger, colored output, timer output for operations with long-term execution)
+- 🤖 TEST: Tests
+- 📖 DOC: Code docs
+- 📦 NEW: AWS Support
+- 📦 NEW: Bulk generation of VPN client .conf(s)
+- 📦 NEW: Makefile
 
 &nbsp;
 
