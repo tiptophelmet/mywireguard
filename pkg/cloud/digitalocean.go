@@ -2,17 +2,12 @@ package cloud
 
 type DigitalOceanDroplet struct {
 	Image  string `toml:"image" terraform:"digitalocean_droplet_image"`
-	Name   string `toml:"name" terraform:"digitalocean_droplet_name"`
 	Region string `toml:"region" terraform:"digitalocean_droplet_region"`
 	Size   string `toml:"size" terraform:"digitalocean_droplet_size"`
 }
 
 func (droplet *DigitalOceanDroplet) GetImage() string {
 	return droplet.Image
-}
-
-func (droplet *DigitalOceanDroplet) GetName() string {
-	return droplet.Name
 }
 
 func (droplet *DigitalOceanDroplet) GetRegion() string {

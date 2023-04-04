@@ -11,7 +11,6 @@ import (
 
 type Instance interface {
 	GetImage() string
-	GetName() string
 	GetRegion() string
 	GetSize() string
 }

@@ -13,7 +13,7 @@ import (
 )
 
 type VpnEntry struct {
-	ID string
+	ID string `terraform:"vpn_identifier"`
 
 	Cloud cloud.Cloud
 
