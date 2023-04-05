@@ -166,7 +166,7 @@ Download: https://www.wireguard.com/install/
 
 # 📊 __Cloud Suitability for Dedicated IPs Feature__
 
-A quick research made to help you out with choosing a cloud, if you decide to use MyWireguard CLI to provision a Wireguard VPN with Dedicated IPs support for your VPN clients.
+A quick research made to help you out with choosing a cloud, if you decide to focus on  Dedicated IPs feature.
 
 Despite the different cost effectiveness of each cloud for Dedicated IPs feature, it is still planned to cover most of the clouds.
 
@@ -176,7 +176,6 @@ Despite the different cost effectiveness of each cloud for Dedicated IPs feature
 | Microsoft Azure | 2+ dedicated IPs possible per instance, see quotas below | ✅🤔 OK, but pricier than AWS | 📅 planned |
 | Google Cloud | 2+ dedicated IPs possible per instance, see quotas below | ✅🤔 OK, but pricier than AWS & low initial quotas | 📅 planned |
 | DigitalOcean | 1 dedicated IP per instance | ⚠️ costly | ❓ under consideration |
-&nbsp;
 
 ## __Links__: 
 - ### __AWS__
