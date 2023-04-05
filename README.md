@@ -119,17 +119,6 @@ mywg del-vpn --vpnid=team-vpn
 
 &nbsp;
 
-# ☁️ __Cloud Support__
-
-✅ Supported:
-- DigitalOcean
-
-❌ Not yet supported:
-- AWS
-- GCP
-
-&nbsp;
-
 # ⚠️ __VPN clients limitations__
 Currently, all connected clients have 1 shared static IP. Dedicated IPs support is planned.
 
@@ -159,7 +148,94 @@ Download: https://www.wireguard.com/install/
 - 📖 DOC: Code docs
 - 📦 NEW: AWS Support
 - 📦 NEW: Bulk generation of VPN client .conf(s)
-- 📦 NEW: Dedicated public IPs for VPN clients
+- 📦 NEW: Dedicated IPs for VPN clients
+
+&nbsp;
+
+# ☁️ __Cloud Support__
+
+✅ Supported:
+- DigitalOcean
+
+❌ Not yet supported, 📅 but planned:
+- AWS
+- Microsoft Azure
+- Google Cloud
+
+&nbsp;
+
+# 📊 __Cloud Suitability for Dedicated IPs Feature__
+
+A quick research made to help you out with choosing a cloud, if you decide to use MyWireguard CLI to provision a Wireguard VPN with Dedicated IPs support for your VPN clients.
+
+Despite the different cost effectiveness of each cloud for Dedicated IPs feature, it is still planned to cover most of the clouds.
+
+| ☁️ | IPs per instance | Cost effectiveness | Dedicated IPs Feature Status |
+|--------|--------|:--------:|:--------:|
+| AWS | 2+ dedicated IPs possible per instance, see quotas below | ✅ OK | 📅 planned |
+| Microsoft Azure | 2+ dedicated IPs possible per instance, see quotas below | ✅🤔 OK, but pricier than AWS | 📅 planned |
+| Google Cloud | 2+ dedicated IPs possible per instance, see quotas below | ✅🤔 OK, but pricier than AWS & low initial quotas | 📅 planned |
+| DigitalOcean | 1 dedicated IP per instance | ⚠️ costly | ❓ under consideration |
+&nbsp;
+
+## __Links__: 
+- ### __AWS__
+    Quotas for network interfaces per region:
+
+    https://us-east-2.console.aws.amazon.com/servicequotas/home/services/vpc/quotas (search for "Network interfaces per Region")
+
+    Quotas for network interfaces per instance:
+    
+    https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI 
+    
+    <u>1 network interface == 1 dedicated Elastic IP.</u> 
+
+    __Example__: EC2 t3.medium instance is allowed to have 3 network interfaces at max. So 3 network interfaces == 3 dedicated IPs for t3.medium instance.
+    
+    Use https://calculator.aws/ to calculate your approx. costs
+
+- ### __Microsoft Azure__
+
+    Quotas for network interfaces per VM:
+
+    https://learn.microsoft.com/en-us/azure/virtual-machines/sizes
+
+    <u>1 network interface == 1 dedicated Static IP.</u>
+
+    __Example__: Standard_B1ms VM is allowed to have 2 network interfaces at max. 
+    
+    https://learn.microsoft.com/en-us/azure/virtual-machines/sizes-b-series-burstable
+    
+    So 2 network interfaces == 2 dedicated IPs for Standard_B1ms VM.
+
+    Use https://azure.microsoft.com/en-us/pricing/calculator/ to calculate your approx. costs
+
+- ### __Google Cloud__
+
+    Maximum possible number of network interfaces:
+    https://cloud.google.com/vpc/docs/quota#per_instance (see "Maximum number of network interfaces" in quotas table)
+
+    ☝️ Pay attention that "Maximum number of network interfaces" is the highest possible number, meaning that specific VMs will have their own network interfaces limits
+
+    Quotas for network interfaces per project:
+
+    https://console.cloud.google.com/iam-admin/quotas (then select your project & see "Networks" in quotas table)
+
+    ⚠️ __Warnings:__ 
+    - Google Cloud Static IPs cannot be attached to network interfaces, only 1 Static IP can be attached directly to your VM
+    - Having Network Interfaces attached to your VM, you get Ephemeral Public IPs pointing to your VM, not Static IPs
+    - Ephemeral IPs might be reset with each VM start/stop, VM reboot does not change Ephemeral IPs
+    - <b><u>Initial networks per project quota is 5</u></b> meaning no more than 5 public IPs in total for all VMs, consider requesting an increase
+
+    &nbsp;
+
+    🎯 For an accurate number of network interfaces per instance, refer to:
+
+    VM types:
+    https://cloud.google.com/compute
+    
+    Network interfaces number depending on vCPU count:
+    https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#max-interfaces
 
 &nbsp;
 
