@@ -7,7 +7,7 @@ With our app, you can easily set up a secure VPN connection between your devices
 
 💻 If you're not familiar with Wireguard, it's a modern VPN protocol that is designed to be fast, simple, and secure. We use state-of-the-art cryptography to ensure the confidentiality, integrity, and authenticity of data transmitted over the VPN. Compared to other VPN protocols, such as OpenVPN and IPSec, Wireguard is faster, more lightweight, and easier to set up and manage. 🚀
 
-💰 By using MyWireguard, you can save valuable time and effort that would otherwise be spent on setting up the VPN manually. Our app provides a simple and automated solution that is perfect for small teams looking for their own cloud-hosted low-cost and cheap VPN. 
+💰 By using MyWireguard CLI app, you can save valuable time and effort that would otherwise be spent on setting up the VPN manually. Our app provides a simple and automated solution that is perfect for small teams looking for their own cloud-hosted low-cost and cheap VPN. 
 
 🔒💰 With a secure Wireguard VPN protocol & this CLI app in pair - you get a strong balance between cost & security.
 
