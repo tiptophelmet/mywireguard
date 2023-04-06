@@ -1,9 +1,8 @@
 #!/bin/bash
 
 # Install WireGuard
-add-apt-repository ppa:wireguard/wireguard -y
-apt-get update
-apt-get install -y wireguard
+apt update -y
+apt install -y wireguard
 
 # Configure WireGuard
 cat > /etc/wireguard/wg0.conf <<EOL
@@ -21,7 +20,7 @@ echo "net.ipv4.ip_forward=1" | tee -a /etc/sysctl.conf
 sysctl -p
 
 # Install UFW (if not already installed)
-apt-get install -y ufw
+apt install -y ufw
 
 # Configure UFW to allow incoming traffic on the WireGuard port
 ufw allow {wireguard_interface_listen_port}/udp
