@@ -218,6 +218,9 @@ Despite the different cost effectiveness of each cloud for Dedicated IPs feature
 - 👌 IMPROVE: CLI commands design
 - 👌 IMPROVE: Better error handling
 - 👌 IMPROVE: Better logging (logger, colored output, timer output for operations with long-term execution)
+- 📖 DOC: Provide boilerplate .toml(s) for setting up a VPN
+- 👌 IMPROVE: Back & forward slashes for command filepath options
+- 👌 IMPROVE: Optional conf path for new-client command
 - 🤖 TEST: Tests
 - 📖 DOC: Code docs
 - 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
