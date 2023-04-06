@@ -22,7 +22,7 @@ It's great, if you, as a worker, is provided with a company's VPN & a Static IP.
 You can find numerous VPN providers offering Static IP as well. 
 
 🤔🌐 Such solutions will match your needs, but keep in mind these concerns: 
-- You pay 2 twice: for a VPN access & for a Static IP.
+- You pay twice: for a VPN access & for a Static IP.
 - You may be unsure of how your business/product-sensitive data flows through VPN providers
 - You might want to consider hosting your own VPN to be 100% sure your business/product-sensitive data is treated properly
 
