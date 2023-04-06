@@ -138,20 +138,6 @@ Download: https://www.wireguard.com/install/
 
 &nbsp;
 
-# 🗺️ __Roadmap__
-- 👌 IMPROVE: CLI commands design
-- 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
-- 📦 NEW: Makefile
-- 👌 IMPROVE: Better error handling
-- 👌 IMPROVE: Better logging (logger, colored output, timer output for operations with long-term execution)
-- 🤖 TEST: Tests
-- 📖 DOC: Code docs
-- 📦 NEW: AWS Support
-- 📦 NEW: Bulk generation of VPN client .conf(s)
-- 📦 NEW: Dedicated IPs for VPN clients
-
-&nbsp;
-
 # ☁️ __Cloud Support__
 
 ✅ Supported:
@@ -235,6 +221,20 @@ Despite the different cost effectiveness of each cloud for Dedicated IPs feature
     
     Network interfaces number depending on vCPU count:
     https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#max-interfaces
+
+&nbsp;
+
+# 🗺️ __Roadmap__
+- 👌 IMPROVE: CLI commands design
+- 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
+- 📦 NEW: Makefile
+- 👌 IMPROVE: Better error handling
+- 👌 IMPROVE: Better logging (logger, colored output, timer output for operations with long-term execution)
+- 🤖 TEST: Tests
+- 📖 DOC: Code docs
+- 📦 NEW: AWS Support
+- 📦 NEW: Bulk generation of VPN client .conf(s)
+- 📦 NEW: Dedicated IPs for VPN clients
 
 &nbsp;
 
