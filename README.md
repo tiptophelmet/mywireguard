@@ -63,10 +63,8 @@ image = "ubuntu-20-04-x64"
 region = "fra1"
 size = "s-1vcpu-1gb"
 ```
----
 
 ## ➕ __New VPN client__
-
 
 ```
 mywg new-client --vpnid=team-vpn --conf=/output/path/for/vpn-client-james.conf
@@ -85,15 +83,11 @@ AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
 
----
-
 ## 📋 __List VPNs__
 
 ```
 mywg list-vpn
 ```
-
----
 
 ## 📋 __List VPN clients__
 
@@ -101,15 +95,11 @@ mywg list-vpn
 mywg list-client --vpnid=team-vpn
 ```
 
----
-
 ## ❌ __Delete VPN client__
 
 ```
 mywg del-client --clientid=vpn-client-james --vpnid=team-vpn 
 ```
-
----
 
 ## ❌ __Delete VPN__
 
