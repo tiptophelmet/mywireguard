@@ -226,15 +226,19 @@ Despite the different cost effectiveness of each cloud for Dedicated IPs feature
 
 # 🗺️ __Roadmap__
 - 👌 IMPROVE: CLI commands design
-- 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
-- 📦 NEW: Makefile
 - 👌 IMPROVE: Better error handling
 - 👌 IMPROVE: Better logging (logger, colored output, timer output for operations with long-term execution)
 - 🤖 TEST: Tests
 - 📖 DOC: Code docs
+- 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
 - 📦 NEW: AWS Support
+- 📦 NEW: Google Cloud Support
+- 📦 NEW: Microsoft Azure Support
 - 📦 NEW: Bulk generation of VPN client .conf(s)
+- 📦 NEW: Track VPN max capacity according to max network interfaces
+- 📦 NEW: Track max instances quota per cloud
 - 📦 NEW: Dedicated IPs for VPN clients
+- 📦 NEW: Makefile
 
 &nbsp;
 
