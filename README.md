@@ -221,6 +221,7 @@ Despite the different cost effectiveness of each cloud for Dedicated IPs feature
 - 🤖 TEST: Tests
 - 📖 DOC: Code docs
 - 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
+- 📦 NEW: Force delete VPN
 - 📦 NEW: AWS Support
 - 📦 NEW: Google Cloud Support
 - 📦 NEW: Microsoft Azure Support
