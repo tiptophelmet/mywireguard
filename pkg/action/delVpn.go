@@ -19,7 +19,7 @@ func InitDeleteVpnAction(entry *entry.VpnEntry) *DeleteVpnAction {
 
 	// Check if clients are present
 	entries, err := os.ReadDir(paths.BuildVpnClientsDirPath(entry.ID, paths.GetPath))
-	if err != nil {
+	if err != nil && !os.IsNotExist(err) {
 		log.Fatalf(err.Error())
 	}
 
