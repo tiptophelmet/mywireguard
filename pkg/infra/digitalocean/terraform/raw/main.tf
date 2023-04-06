@@ -51,6 +51,8 @@ resource "digitalocean_firewall" "mywireguard_vpn_firewall" {
     digitalocean_droplet.mywireguard_vpn.id
   ]
 
+  depends_on = [digitalocean_droplet.mywireguard_vpn]
+
   inbound_rule {
     protocol         = "tcp"
     port_range       = "22"
