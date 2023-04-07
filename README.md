@@ -221,17 +221,24 @@ Despite the different cost effectiveness of each cloud for Dedicated IPs feature
 - 📖 DOC: Provide boilerplate .toml(s) for setting up a VPN
 - 👌 IMPROVE: Back & forward slashes for command filepath options
 - 👌 IMPROVE: Optional conf path for new-client command
+- 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
 - 🤖 TEST: Tests
 - 📖 DOC: Code docs
-- 📦 NEW: Feature to allow specific outbound TCP ports instead of all TCP ports
+- 🚀 __RELEASE: <u>v0.1.0__</u>
 - 📦 NEW: Force delete VPN
-- 📦 NEW: AWS Support
-- 📦 NEW: Google Cloud Support
-- 📦 NEW: Microsoft Azure Support
 - 📦 NEW: Bulk generation of VPN client .conf(s)
+- 🚀 __RELEASE: <u>v0.2.0__</u>
+- 📦 NEW: AWS Support
+- 🚀 __RELEASE: <u>v0.3.0__</u>
+- 📦 NEW: Google Cloud Support
+- 🚀 __RELEASE: <u>v0.4.0__</u>
+- 📦 NEW: Microsoft Azure Support
+- 🚀 __RELEASE: <u>v0.5.0__</u>
 - 📦 NEW: Track VPN max capacity according to max network interfaces
 - 📦 NEW: Track max instances quota per cloud
+- 🚀 __RELEASE: <u>v0.6.0__</u>
 - 📦 NEW: Dedicated IPs for VPN clients
+- 🚀 __RELEASE: <u>v1.6.0__</u>
 - 📦 NEW: Makefile
 
 &nbsp;
