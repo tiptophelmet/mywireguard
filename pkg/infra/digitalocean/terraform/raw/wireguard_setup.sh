@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Install WireGuard
+# Prepare to install Wireguard
+sleep 60
 apt update -y
+systemctl restart packagekit.service
+systemctl restart unattended-upgrades.service
+
+# Install WireGuard
 apt install -y wireguard
 
 # Configure WireGuard
