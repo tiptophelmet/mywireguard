@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 	"regexp"
+	"time"
 )
 
 type InfraExecutor struct {
@@ -26,7 +27,22 @@ func (infra *InfraExecutor) Apply(execPath string) (vpnPublicIP string, err erro
 
 	fmt.Println("[OK] Terraform init done!")
 
-	fmt.Println("[INFO] Terraform apply in progress ...")
+	fmt.Println("[INFO] Terraform apply started (duration: ~2m40s)")
+
+	applyStarted := time.Now()
+	applied := make(chan bool)
+	ticker := time.NewTicker(10 * time.Second)
+	go func() {
+		for {
+			select {
+			case <-applied:
+				return
+			case <-ticker.C:
+				elapsed := time.Since(applyStarted)
+				fmt.Printf("[INFO] Terraform apply in progress ... (%v)\n", elapsed.Round(time.Second))
+			}
+		}
+	}()
 
 	cmd = exec.Command("terraform", "apply", "-auto-approve")
 	cmd.Dir = execPath
@@ -38,6 +54,10 @@ func (infra *InfraExecutor) Apply(execPath string) (vpnPublicIP string, err erro
 	cmd.Stderr = &stdErr
 
 	err = cmd.Run()
+
+	applied <- true
+	ticker.Stop()
+
 	if err != nil {
 		return "", fmt.Errorf("error running 'terraform apply' %w (%s) error: %s", err, execPath, stdErr.String())
 	}
